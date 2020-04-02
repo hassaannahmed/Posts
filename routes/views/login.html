@@ -1,0 +1,125 @@
+<html>
+    <head>
+        <title>Login and Registration Form</title>
+        <style type="text/css">
+        .form-box{
+    width: 380px;
+    height: 480px;
+    position: relative;
+    margin: 6% auto;
+    background:white;
+    padding: 5px;
+    border-style:solid;
+
+}
+.logo{
+    width:60px;
+    height:35px;
+    position: relative;
+    margin: 6% auto;
+    background: white;
+    padding-top: 0px;
+    padding-right: 20px;
+    padding-bottom: 0px;
+    padding-left: 10px;
+
+}
+.log-box{
+    width: 280px;
+    height: 300px;
+    position: relative;
+    margin: 6% auto;
+    background: white;
+    padding: 10px,0px,0px,10px;
+    border-style: solid;
+    margin-top: 10% ;
+
+}
+
+.mail{
+    position: relative;
+    margin-left: 22px;
+}
+.input-field1{
+    position: relative;
+    margin-left: 22px;
+    margin-top: 10px;
+}
+.pass{
+    position: relative;
+    margin-left: 22px;
+}
+.input-field2{
+    position: relative;
+    margin-top: 10px;
+}
+.login-butt{
+    cursor: pointer;
+    position: relative;
+    margin-top: 30px;
+    margin-left: 100px;
+}
+
+        </style>
+
+<script
+src="https://code.jquery.com/jquery-3.4.1.js"
+integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+       
+    </head>
+        <body>
+            <div class="form-box">
+                <div class="logo"><h2>LOGO</h2></div>
+                <div class ="log-box">
+                    <div id="Redalert" class="alert alert-danger" role="alert">
+                        Incorrect Username Or Password!
+                      </div>
+                    <!-- <form class=input-group> -->
+                        <label class="mail">Email</label>
+                        <input id="username" type="text" class="input-field1" placeholder="" required>
+                        <label class="pass">password</label>
+                        <input type="text" class="input-field2" placeholder="" id="password" required>
+                        <button onclick="login()" class= "login-butt">Login</button>
+                        <a href="register.html"><button class="register-butt">Register</button></a>
+                </div>
+                
+            </div>
+
+            </body>
+            <script>
+                $("#Redalert").hide()
+                if(localStorage.getItem('id')){
+                    window.location.href = "/pictures/";
+                }
+
+                function login(){
+                    $.ajax({
+                    type: "GET",
+                    url: "/api/login/",
+                    data: {"username":$(username).val(),"password":$(password).val()},
+                    success: function(data, textStatus, xhr) {
+                        console.log(data)
+                        if(data=='Rejected'){
+                            $("#Redalert").fadeTo(2000, 500).slideUp(500, function() {
+                                $("#Redalert").slideUp(500);
+                            });
+
+                        }else{
+                            // Take to Pictures 
+                            console.log('setting local->'+data)
+                            localStorage.setItem('user',JSON.stringify(data))
+                            window.location.href = "/pictures/";
+                        }
+                    },
+                    complete: function(xhr, textStatus) {
+                        console.log(xhr.status);
+                    } ,
+                    dataType: 'text'
+                    });
+                }
+            </script>
+    </html>

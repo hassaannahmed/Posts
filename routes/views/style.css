@@ -1,0 +1,66 @@
+
+
+.form-box{
+    width: 380px;
+    height: 480px;
+    position: relative;
+    margin: 6% auto;
+    background:white;
+    padding: 5px;
+    border-style:solid;
+
+}
+.logo{
+    width:60px;
+    height:35px;
+    position: relative;
+    margin: 6% auto;
+    background: white;
+    padding-top: 0px;
+    padding-right: 20px;
+    padding-bottom: 0px;
+    padding-left: 10px;
+
+}
+.log-box{
+    width: 280px;
+    height: 300px;
+    position: relative;
+    margin: 6% auto;
+    background: white;
+    padding: 10px,0px,0px,10px;
+    border-style: solid;
+    margin-top: 10% ;
+
+}
+
+.mail{
+    position: relative;
+    margin-left: 22px;
+}
+.input-field1{
+    position: relative;
+    margin-left: 22px;
+    margin-top: 10px;
+}
+.pass{
+    position: relative;
+    margin-left: 22px;
+}
+.input-field2{
+    position: relative;
+    margin-top: 10px;
+}
+.login-butt{
+    cursor: pointer;
+    position: relative;
+    margin-top: 30px;
+    margin-left: 100px;
+}
+
+.register-butt{
+    cursor: pointer;
+    position:  relative;
+    margin-top: 10px;
+    margin-left: 100px;
+}

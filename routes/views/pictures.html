@@ -1,0 +1,164 @@
+<html>
+    <head>
+        <title>Main Page</title>
+        <style type="text/css">
+        .main-box{
+            max-width: 100%;
+            
+            position: relative;
+            background:white;
+            padding: 5px;
+            border-style:solid;
+        }
+        .LOGO{
+            position: relative;
+            width:130px;
+            height:50px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 6px;
+            border-style: solid;
+            padding-left: 20px;
+            padding-bottom: 10px;
+        }
+        .marginauto {
+            margin: 10px auto 20px;
+            display: block;
+        }
+        .main-box p{
+            text-align: center;
+        }
+        .main-box label{
+            text-align: center;
+        }
+        .main-box form{
+            text-align: center;
+        }
+
+        </style>
+        <script
+        src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+               
+        </head>
+        <body>
+            <div class="main-box">
+                <div class="logo"><h2>LOGO</h2></div>
+                <p id="name">Name: </p>
+                <p id="email">Email: </p>
+                <p id="gender">Gender: </p>
+                
+                <!-- <label for="img">Select image:</label> -->
+                <form method="post" action="" enctype="multipart/form-data" id="myform">
+                    <div >
+                        <input type="file" id="file" name="file" />
+                        <input type="button" class="button" value="Upload" id="but_upload">
+                    </div>
+                </form>
+                <div style="text-align:center">
+                    <button style="text-align: center;" id="logout">Logout</button>
+                    <button style="text-align: center;" id="allPictures">All Pictures</button>
+                </div>
+                <div>
+                    <h1 style="text-align: center; margin-bottom: 30px;">My Pictures</h1>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-8">
+                            <div id="picturebox">
+                                <!-- <img src="/api/grabpicture/1.jpeg"> -->
+                            </div>
+
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                </div>
+                
+            </div>
+        </body>
+        <script>
+            
+
+            
+
+            $("document").ready(function(){
+
+                $("#logout").click(function(){
+                    localStorage.clear;
+                    window.location.href = "/";
+                });
+                $("#allPictures").click(function(){
+                    window.location.href = "/allpictures/";
+                    //location.reload(true);
+                });
+
+                var user = JSON.parse((localStorage.getItem('user')));
+                console.log(user)
+                var id = JSON.parse(user).email
+                
+                $('#name').append(JSON.parse(user).username)
+                $('#email').append(JSON.parse(user).email)
+                if(JSON.parse(user).gender==0){
+                    $('#gender').append('Male')
+                }else{
+                    $('#gender').append('Female')
+                }
+                
+                
+                if(!localStorage.getItem('user')){
+                    window.location.href = "/";
+                }
+                
+                console.log(id)
+                $.ajax({
+                    type: "GET",
+                    url: "/api/getPictures/",
+                    data: {"id":id},
+                    success: function(data, textStatus, xhr) {
+                        var response = JSON.parse(data)
+                        console.log(response)
+                        response.forEach(element => {
+                            $('#picturebox').append('<img style="margin-bottom:20px" height="400" width="400" src="api/grabpicture/'+element.id+'.jpg"> <div style="float:right; margin-right:30%; margin-bottom:50px"><label style="margin-top:200px">Votes: '+element.picpoints+'</label></div> <br/>')
+                        });
+                        
+                    },
+                    complete: function(xhr, textStatus) {
+                        console.log(xhr.status);
+                    } ,
+                    dataType: 'text'
+                    });
+                
+                
+                $("#but_upload").click(function(){
+
+                var fd = new FormData();
+                var files = $('#file')[0].files[0];
+                fd.append('file',files);
+
+                
+                $.ajax({
+                    url: '/api/upload/'+id,
+                    type: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    success: function(response){
+                        if(response != 0){
+                            $("#img").attr("src",response); 
+                            location.reload(true);
+                        }else{
+                            alert('file not uploaded');
+                        }
+                    },
+                });
+                });   
+            });
+
+
+        </script>
+    </html>
